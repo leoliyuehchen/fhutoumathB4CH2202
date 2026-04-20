@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>九宮格集合法教學助手 v15.0</title>
+    <title>九宮格集合法教學助手 v15.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = { tex: { inlineMath: [['$', '$']] } };
@@ -108,7 +108,6 @@ function lcm_arr(arr) { return arr.reduce((a, b) => lcm_two(a, b)); }
 function simplify(n, d) { const g = gcd(n, d); return [n/g, d/g]; }
 function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
-// 計算組合數 C(n, k)
 function C(n, k) {
     if(k < 0 || k > n) return 0;
     if(k === 0 || k === n) return 1;
@@ -222,7 +221,6 @@ function playDing(ok) {
     o.start(); o.stop(audioCtx.currentTime + 0.2);
 }
 
-// 跳格引擎：尋找下一個未隱藏、未禁用的 input-box
 function focusNextInput() {
     const inputs = Array.from(document.querySelectorAll('.input-box:not([disabled])'));
     const visibleInputs = inputs.filter(inp => inp.offsetParent !== null);
@@ -240,11 +238,11 @@ function initUI() {
     
     let labels = [];
     if(cur.type === 'multi') {
-        labels = [{t:'全體(U)'}, {t:`A: ${cur.m1}的倍數`}, {t:'A 不發生'}, {t:`B: ${cur.m2}的倍數`}, {t:'A∩B'}, {t:'A\'∩B'}, {t:'B 不發生'}, {t:'A∩B\''}, {t:'雙不(A\'∩B\')'}];
+        labels = [{t:'全體(S)'}, {t:`A: ${cur.m1}的倍數`}, {t:'A 不發生'}, {t:`B: ${cur.m2}的倍數`}, {t:'A∩B'}, {t:'A\'∩B'}, {t:'B 不發生'}, {t:'A∩B\''}, {t:'雙不(A\'∩B\')'}];
     } else if (cur.type === 'advanced4') {
-        labels = [{t:'全體(U)'}, {t:'A: 甲被選中'}, {t:'甲未被選中'}, {t:'B: 乙被選中'}, {t:'甲乙皆選中(A∩B)'}, {t:'僅乙被選中'}, {t:'乙未被選中'}, {t:'僅甲被選中'}, {t:'甲乙皆未選中'}];
+        labels = [{t:'全體(S)'}, {t:'A: 甲被選中'}, {t:'甲未被選中'}, {t:'B: 乙被選中'}, {t:'甲乙皆選中(A∩B)'}, {t:'僅乙被選中'}, {t:'乙未被選中'}, {t:'僅甲被選中'}, {t:'甲乙皆未選中'}];
     } else {
-        labels = [{t:'P(U)'}, {t:'P(A)'}, {t:'P(A\')'}, {t:'P(B)'}, {t:'P(A∩B)'}, {t:'P(A\'∩B)'}, {t:'P(B\')'}, {t:'P(A∩B\')'}, {t:'P(A\'∩B\')'}];
+        labels = [{t:'P(S)'}, {t:'P(A)'}, {t:'P(A\')'}, {t:'P(B)'}, {t:'P(A∩B)'}, {t:'P(A\'∩B)'}, {t:'P(B\')'}, {t:'P(A∩B\')'}, {t:'P(A\'∩B\')'}];
     }
 
     labels.forEach((l, i) => {
@@ -434,7 +432,7 @@ function runFracFlow() {
         </div>
         <div id="frac-knowns-zone" class="mt-4 space-y-4" style="display:none">
             <div class="text-sm font-bold text-orange-800 border-t pt-3">將已知分數進行擴分：</div>
-            ${['P(U)=1', `P(A)=\\frac{${cur.aStr.split('/')[0]}}{${cur.aStr.split('/')[1]}}`, `P(B)=\\frac{${cur.bStr.split('/')[0]}}{${cur.bStr.split('/')[1]}}`, `P(A\\cap B)=\\frac{${cur.capStr.split('/')[0]}}{${cur.capStr.split('/')[1]}}`].map((l, i) => {
+            ${['P(S)=1', `P(A)=\\frac{${cur.aStr.split('/')[0]}}{${cur.aStr.split('/')[1]}}`, `P(B)=\\frac{${cur.bStr.split('/')[0]}}{${cur.bStr.split('/')[1]}}`, `P(A\\cap B)=\\frac{${cur.capStr.split('/')[0]}}{${cur.capStr.split('/')[1]}}`].map((l, i) => {
                 const idx = i===0?0:i===1?1:i===2?3:4;
                 return `<div class="flex items-center gap-1"><span class="text-sm font-bold w-40 text-right">$${l}$ = </span>
                 ${buildFracInput(`in-k${idx}`, idx, cur.m[idx], 'known', '擴分錯誤')}
@@ -455,7 +453,7 @@ function runMutuallyFlow() {
         </div>
         <div id="frac-knowns-zone" class="mt-4 space-y-4" style="display:none">
             <div class="text-sm font-bold text-orange-800 border-t pt-3">將已知分數進行擴分：</div>
-            ${[`P(U)=1`, `P(A')=\\frac{${cur.apStr.split('/')[0]}}{${cur.apStr.split('/')[1]}}`, `P(B)=\\frac{${cur.bStr.split('/')[0]}}{${cur.bStr.split('/')[1]}}`].map((l, i) => {
+            ${[`P(S)=1`, `P(A')=\\frac{${cur.apStr.split('/')[0]}}{${cur.apStr.split('/')[1]}}`, `P(B)=\\frac{${cur.bStr.split('/')[0]}}{${cur.bStr.split('/')[1]}}`].map((l, i) => {
                 const idx = i===0?0:i===1?2:3;
                 return `<div class="flex items-center gap-1"><span class="text-sm font-bold w-40 text-right">$${l}$ = </span>
                 ${buildFracInput(`in-k${idx}`, idx, cur.m[idx], 'known', '擴分錯誤')}
@@ -503,7 +501,7 @@ function runAdvanced4Flow() {
     addStep(`<b>第一步：計算組合數 (分子與分母)</b>
         <div class="space-y-4 mt-3">
             <div class="flex items-center gap-2">
-                <span class="text-sm font-bold text-orange-800">所有組合數 $n(U) = C_{${cur.K}}^{${cur.N}}$ = </span>
+                <span class="text-sm font-bold text-orange-800">所有組合數 $n(S) = C_{${cur.K}}^{${cur.N}}$ = </span>
                 ${buildInlineInput('in-multi-den', null, cur.lcm, 'multi-den', `計算 C(${cur.N}, ${cur.K})`)}
                 <button onclick="processInputCheck(document.getElementById('in-multi-den'))" class="check-btn">確認</button><span id="msg-in-multi-den"></span>
             </div>
@@ -533,12 +531,12 @@ async function runDecFlow() {
 function renderLogicStep() {
     if(document.getElementById('logic-card')) return;
     addStep(`<b>第二步：推論剩餘空格</b>
-        <p class="text-sm mt-1 mb-3">請依序利用行列相加減求出：</p>
+        <p class="text-sm mt-1 mb-3">請先找單一集合再找核心區，依序求出對應數值：</p>
         <div id="logic-zone" class="space-y-3"></div>`, 'logic-card');
     
     const zone = document.getElementById('logic-zone');
     const getL = (b) => (cur.type === 'multi' || cur.type === 'advanced4') ? `n(${b})` : `$P(${b})$`;
-    const logicOrder = [ {l: getL('A'), i:1, h:"U - A'"}, {l: getL("A'"), i:2, h:"U - A"}, {l: getL('B'), i:3, h:"U - B'"}, {l: getL("B'"), i:6, h:"U - B"}, {l: getL("A'\\cap B"), i:5, h:"B - (A∩B)"}, {l: getL("A\\cap B'"), i:7, h:"A - (A∩B)"}, {l: getL("A'\\cap B'"), i:8, h:"行列相減"} ];
+    const logicOrder = [ {l: getL('A'), i:1, h:"S - A'"}, {l: getL("A'"), i:2, h:"S - A"}, {l: getL('B'), i:3, h:"S - B'"}, {l: getL("B'"), i:6, h:"S - B"}, {l: getL("A'\\cap B"), i:5, h:"B - (A∩B)"}, {l: getL("A\\cap B'"), i:7, h:"A - (A∩B)"}, {l: getL("A'\\cap B'"), i:8, h:"行列相減"} ];
     
     logicOrder.forEach(t => {
         if(cur.user[t.i] !== null) return;
