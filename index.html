@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>九宮格集合法教學助手 v16.1 (投影黃金比例版)</title>
+    <title>九宮格集合法教學助手 v17.0 (投影大師版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         window.MathJax = { tex: { inlineMath: [['$', '$']] } };
@@ -16,21 +16,19 @@
         #left-panel { flex: 0 0 600px; background: #fffcf5; border-right: 4px solid #edaf7d; display: flex; flex-direction: column; padding: 24px; overflow-y: auto; }
         #right-panel { flex: 1; padding: 30px; overflow-y: auto; background: #fff9ed; padding-bottom: 300px; scroll-behavior: smooth; }
         
-        /* 九宮格樣式：標題放大、數值微縮 */
         .grid-9 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: #edaf7d; border: 3px solid #edaf7d; border-radius: 10px; position: relative; }
         .grid-cell { background: #fff4e0; min-height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; transition: all 0.3s; position: relative; }
         .grid-cell.header { background: #ffecb3; }
         .cell-label { font-size: 1.4rem; color: #e65100; font-weight: 900; margin-bottom: 8px; text-align: center; }
-        .cell-val { font-size: 1.9rem; font-weight: 900; color: #1a237e; }
+        .cell-val { font-size: 2rem; font-weight: 900; color: #1a237e; }
 
         .flashing { animation: cell-flash 0.6s infinite alternate; border: 5px solid #d84315 !important; z-index: 20; }
         @keyframes cell-flash { from { background: #fff4e0; } to { background: #ffcc80; } }
 
         .step-card { background: white; border-radius: 16px; padding: 24px; margin-bottom: 24px; border-left: 12px solid #ff9800; box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
         
-        /* 互動輸入框全面極大化 */
         .frac-box { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; vertical-align: middle; margin: 0 8px; }
-        .input-box { width: 85px; height: 54px; border: 3px solid #ccc; border-radius: 8px; text-align: center; font-weight: 900; font-size: 1.6rem; color: #d84315; transition: border 0.2s; }
+        .input-box { width: 85px; height: 50px; border: 3px solid #ccc; border-radius: 8px; text-align: center; font-weight: 900; font-size: 1.6rem; color: #d84315; transition: border 0.2s; }
         .input-box:focus { border-color: #ff9800; outline: none; background: #fffde7; box-shadow: 0 0 0 4px rgba(255,152,0,0.25); }
         .frac-line { width: 100%; height: 4px; background-color: #333; margin: 6px 0; }
         .frac-denom { font-weight: 900; font-size: 1.6rem; color: #333; }
@@ -40,7 +38,7 @@
         .correct-tag { color: #22c55e; font-weight: 900; font-size: 1.4rem; }
         .error-tag { color: #ef4444; font-weight: bold; font-size: 1.2rem; }
         
-        .check-mark { position: absolute; top: -10px; right: 10px; color: #16a34a; font-weight: 900; font-size: 3.5rem; z-index: 30; }
+        .check-mark { position: absolute; top: -10px; right: 10px; color: #16a34a; font-weight: 900; font-size: 4rem; z-index: 30; }
     </style>
 </head>
 <body>
@@ -54,14 +52,14 @@
         <p class="text-lg text-orange-800 mt-4 text-center font-black">《運算規則》每列：左 = 中 + 右 ｜ 每欄：上 = 中 + 下</p>
 
         <div id="obs-section" class="mt-6 hidden transition-opacity duration-500">
-            <p class="text-2xl font-black text-orange-900 mb-3">🔍 觀察工具區 <span class="text-base text-gray-500 font-normal">(請利用此區幫助求解)</span></p>
+            <p class="text-2xl font-black text-orange-900 mb-3">🔍 觀察工具區 <span class="text-base text-gray-500 font-normal">(點擊按鈕觀察圖形)</span></p>
             <div class="space-y-4">
                 <div class="bg-orange-50 p-3 rounded-lg border-2 border-orange-100">
                     <p class="text-lg font-bold text-orange-800 mb-2">a. 四重視角 (連動紫格)</p>
                     <div class="grid grid-cols-4 gap-2">
                         <button class="bg-purple-100 text-purple-900 py-3 rounded font-bold text-lg" onclick="applyObs('a1')">(1) 總計</button>
                         <button class="bg-green-100 text-green-900 py-3 rounded font-bold text-lg" onclick="applyObs('a2')">(2) A+A'</button>
-                        <button class="bg-orange-500 text-white py-3 rounded font-bold text-lg" onclick="applyObs('a3')">(3) B+B'</button>
+                        <button class="bg-orange-500 text-white py-3 rounded font-bold text-lg shadow-md" onclick="applyObs('a3')">(3) B+B'</button>
                         <button class="bg-blue-100 text-blue-900 py-3 rounded font-bold text-lg" onclick="applyObs('a4')">(4) 核心</button>
                     </div>
                 </div>
@@ -91,11 +89,11 @@
         <div class="flex gap-3 mb-8">
             <select id="prob-type" class="p-4 border-4 border-orange-200 rounded-xl font-black text-orange-900 bg-white outline-none text-xl w-2/3">
                 <option value="basic">1. 基本分數機率</option>
-                <option value="mutually">2. 互斥事件專題</option>
+                <option value="mutually">2. 互斥事件專題 (隨機出 S15/T15)</option>
                 <option value="multi">3. 倍數與集合</option>
                 <option value="dec">4. 小數與條件機率</option>
-                <option value="advanced4" selected>5. 應用問題 (進階4)</option>
-                <option value="random">🌟 隨機挑戰</option>
+                <option value="advanced4">5. 應用問題 (進階4)</option>
+                <option value="random" selected>🌟 隨機挑戰</option>
             </select>
             <button onclick="startLesson()" class="flex-1 bg-orange-600 text-white px-4 py-4 rounded-xl font-black shadow-lg hover:bg-orange-700 transition text-xl">重新出題</button>
         </div>
@@ -104,7 +102,6 @@
 </div>
 
 <script>
-// --- 數學工具與題庫 ---
 function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
 function lcm_two(a, b) { return (a * b) / gcd(a, b); }
 function lcm_arr(arr) { return arr.reduce((a, b) => lcm_two(a, b)); }
@@ -144,25 +141,49 @@ const Generator = {
         };
     },
     mutually: () => {
-        const lcms = [12, 15, 20, 24, 30, 40];
-        const orig_lcm = lcms[randInt(0, lcms.length - 1)];
-        const a = randInt(2, Math.floor(orig_lcm / 2) - 1);
-        const b = randInt(2, Math.floor(orig_lcm / 2) - 1);
+        const isDec = Math.random() < 0.5; // 50% 機率出小數題(S15) 或 分數題(T15)
         
-        const [ap_n, ap_d] = simplify(orig_lcm-a, orig_lcm); const [b_n, b_d] = simplify(b, orig_lcm);
-        const actual_lcm = lcm_arr([ap_d, b_d]);
-        const m = [orig_lcm, a, orig_lcm-a, b, 0, b, orig_lcm-b, a, orig_lcm-(a+b)].map(x => (x * actual_lcm) / orig_lcm);
+        if (isDec) {
+            let a_prime_val = randInt(5, 9); 
+            let a_val = 10 - a_prime_val;    
+            let b_val = randInt(1, a_prime_val - 1); 
+            let u_b_val = a_val + b_val;     
+            
+            const m = [10, a_val, a_prime_val, b_val, 0, b_val, 10-b_val, a_val, 10-u_b_val].map(x => x/10);
+            
+            return {
+                type: 'mutually', isDec: true, lcm: 1, m,
+                full: `【S15型】設 $A, B$ 為樣本空間的互斥事件，且 $P(A')=${a_prime_val/10}, P(A\\cup B)=${u_b_val/10}$。`,
+                q: [{ l: "$P(B)$", a: b_val/10 }],
+                ans: [`${u_b_val/10} - ${a_val/10} = ${b_val/10}`],
+                autoFill: [
+                    { idx: 0, v: 1, desc: "全體 $P(S)=1$" },
+                    { idx: 2, v: a_prime_val/10, desc: `$P(A')=${a_prime_val/10}$` },
+                    { idx: 4, v: 0, desc: "互斥事件 $\\implies P(A\\cap B)=0$" },
+                    { idx: 8, v: (10-u_b_val)/10, desc: `$P(A\\cup B)$ 外面 $\\implies P(A'\\cap B')=${(10-u_b_val)/10}$` }
+                ]
+            };
+        } else {
+            const lcms = [12, 15, 20, 24, 30, 40];
+            const orig_lcm = lcms[randInt(0, lcms.length - 1)];
+            const a = randInt(2, Math.floor(orig_lcm / 2) - 1);
+            const b = randInt(2, Math.floor(orig_lcm / 2) - 1);
+            
+            const [ap_n, ap_d] = simplify(orig_lcm-a, orig_lcm); const [b_n, b_d] = simplify(b, orig_lcm);
+            const actual_lcm = lcm_arr([ap_d, b_d]);
+            const m = [orig_lcm, a, orig_lcm-a, b, 0, b, orig_lcm-b, a, orig_lcm-(a+b)].map(x => (x * actual_lcm) / orig_lcm);
 
-        return {
-            type: 'mutually', lcm: actual_lcm, m,
-            full: `$A, B$ 為互斥事件，且 $P(A')=\\frac{${ap_n}}{${ap_d}}, P(B)=\\frac{${b_n}}{${b_d}}$。`,
-            apStr: `${ap_n}/${ap_d}`, bStr: `${b_n}/${b_d}`,
-            q: [{ l: "$P(A\\cup B)$", a: m[1]+m[3] }],
-            ans: (() => {
-                const [sn, sd] = simplify(m[1]+m[3], actual_lcm);
-                return [ sd === 1 ? `${sn}` : `\\dfrac{${m[1]+m[3]}}{${actual_lcm}} = \\dfrac{${sn}}{${sd}}` ];
-            })()
-        };
+            return {
+                type: 'mutually', isDec: false, lcm: actual_lcm, m,
+                full: `【T15型】設 $A, B$ 為互斥事件，且 $P(A')=\\frac{${ap_n}}{${ap_d}}, P(B)=\\frac{${b_n}}{${b_d}}$。`,
+                apStr: `${ap_n}/${ap_d}`, bStr: `${b_n}/${b_d}`,
+                q: [{ l: "$P(A\\cup B)$", a: m[1]+m[3] }],
+                ans: (() => {
+                    const [sn, sd] = simplify(m[1]+m[3], actual_lcm);
+                    return [ sd === 1 ? `${sn}` : `\\dfrac{${m[1]+m[3]}}{${actual_lcm}} = \\dfrac{${sn}}{${sd}}` ];
+                })()
+            };
+        }
     },
     multi: () => {
         const ranges = [100, 200, 300, 500, 1000];
@@ -208,7 +229,7 @@ const Generator = {
             type: 'advanced4', lcm: u, N, K,
             m: [u, a, u-a, b, cap, b-cap, u-b, a-cap, u-(a+b-cap)],
             full: `【進階4】有甲、乙、丙等共 ${N} 位學生，從中任選 ${K} 人參加比賽，每個人被選中的機會均等。`,
-            q: [{ l: "甲或乙被選中的機率", a: qAnsN }],
+            q: [{ l: "甲或乙被選中機率", a: qAnsN }],
             ans: [ sd === 1 ? `${sn}` : `\\dfrac{${qAnsN}}{${u}} = \\dfrac{${sn}}{${sd}}` ]
         };
     }
@@ -262,8 +283,8 @@ function startLesson() {
     
     document.getElementById('steps-container').innerHTML = '';
     document.getElementById('prob-display').innerHTML = `
-        <div class="mb-3"><span class="font-black text-orange-900 border-b-2 border-orange-200 text-xl">【問題敘述】</span><br><div class="mt-3 text-xl">${cur.full}</div></div>
-        <div class="mt-5"><span class="font-black text-blue-800 text-xl">【求解目標】</span><br><span class="font-bold text-2xl text-blue-900 mt-2 block">${cur.q.map(x=>x.l).join('、')}</span></div>
+        <div class="mb-4"><span class="font-black text-orange-900 border-b-2 border-orange-200 text-2xl">【問題敘述】</span><br><div class="mt-4 text-2xl">${cur.full}</div></div>
+        <div class="mt-6"><span class="font-black text-blue-800 text-2xl">【求解目標】</span><br><span class="font-bold text-3xl text-blue-900 mt-3 block">${cur.q.map(x=>x.l).join('、')}</span></div>
     `;
     
     document.getElementById('obs-section').classList.add('hidden');
@@ -299,7 +320,7 @@ function processInputCheck(inputEl) {
         else if(type === 'multi-lcm-step') { document.getElementById('multi-zone-2').style.display = 'flex'; document.getElementById('dyn-lcm').innerText = val; }
         
         if(['known', 'multi-lcm-step'].includes(type)) {
-            const req = { 'basic':[0,1,3,4], 'mutually':[0,2,3,4], 'multi':[0,1,3,4], 'advanced4':[0,1,3,4] }[cur.type];
+            const req = { 'basic':[0,1,3,4], 'mutually': cur.isDec ? [0,2,4,8] : [0,2,3,4], 'multi':[0,1,3,4], 'advanced4':[0,1,3,4] }[cur.type];
             if(req.every(i => cur.user[i] !== null)) renderLogicStep();
         } else if(type === 'logic') {
             if(cur.user.every(v => v !== null)) unlockObsAndFinal();
@@ -308,6 +329,7 @@ function processInputCheck(inputEl) {
         playDing(false); inputEl.style.borderColor = "#ef4444"; inputEl.value = '';
         const hint = inputEl.dataset.hint || "算錯了，請重試";
         msg.innerHTML = `<span class="error-tag ml-3">✗ 提示：${hint}</span>`;
+        if(window.MathJax) MathJax.typesetPromise([msg]);
     }
 }
 
@@ -325,7 +347,10 @@ window.checkFinal1 = function(i, ansN) {
         
         if (gcd(ansN, cur.lcm) === 1) {
             msg.innerHTML = `<span class="correct-tag ml-3">✓ 最簡分數正確！</span>`;
-            document.getElementById(`ans-in-f${i}`).style.display = 'block';
+            const ansDiv = document.getElementById(`ans-in-f${i}`);
+            ansDiv.innerHTML = `算法：$ ${cur.ans[i]} $`;
+            ansDiv.style.display = 'block';
+            if(window.MathJax) MathJax.typesetPromise([ansDiv]);
             checkAllFinalDone();
         } else {
             msg.innerHTML = `<span class="correct-tag ml-3">✓ 數值正確，請約分！</span>`;
@@ -359,8 +384,10 @@ window.checkFinal2 = function(i, ansN) {
         inN.style.background = "#f0fdf4"; inD.style.background = "#f0fdf4";
         msg.innerHTML = `<span class="correct-tag ml-3">✓ 完美最簡分數！</span>`;
         
-        document.getElementById(`ans-in-f${i}`).style.display = 'block';
-        if(window.MathJax) MathJax.typesetPromise();
+        const ansDiv = document.getElementById(`ans-in-f${i}`);
+        ansDiv.innerHTML = `算法：$ ${cur.ans[i]} $`;
+        ansDiv.style.display = 'block';
+        if(window.MathJax) MathJax.typesetPromise([ansDiv]);
         checkAllFinalDone();
     } else if (n/d === targetN/targetD) {
         playDing(false); inN.style.borderColor = "#ef4444"; inD.style.borderColor = "#ef4444";
@@ -384,6 +411,7 @@ function processInputCheckDec(inputId, correct, i) {
         msg.innerHTML = `<span class="correct-tag ml-3">✓ 正確</span>`;
         
         const ansDiv = document.getElementById(`ans-in-f${i}`);
+        ansDiv.innerHTML = `算法：$ ${cur.ans[i]} $`;
         ansDiv.style.display = 'block';
         if(window.MathJax) MathJax.typesetPromise([ansDiv]);
         
@@ -445,29 +473,47 @@ function runFracFlow() {
 }
 
 function runMutuallyFlow() {
-    const denoms = Array.from(new Set([cur.apStr, cur.bStr].map(x=>x.split('/')[1]))).join(', ');
-    addStep(`<b><span class="text-2xl">第一步：找尋公倍數與擴分</span></b>
-        <div class="flex items-center gap-3 mt-5">
-            <span class="text-2xl font-bold text-orange-800">請輸入分母 ${denoms} 的最小公倍數：</span>
-            ${buildInlineInput('in-lcm', null, cur.lcm, 'lcm', '請再檢查公倍數')}
-            <button onclick="processInputCheck(document.getElementById('in-lcm'))" class="check-btn">確認</button><span id="msg-in-lcm"></span>
-        </div>
-        <div id="frac-knowns-zone" class="mt-6 space-y-6" style="display:none">
-            <div class="text-2xl font-bold text-orange-800 border-t-2 pt-5">將已知分數進行擴分：</div>
-            ${[`P(S)=1`, `P(A')=\\frac{${cur.apStr.split('/')[0]}}{${cur.apStr.split('/')[1]}}`, `P(B)=\\frac{${cur.bStr.split('/')[0]}}{${cur.bStr.split('/')[1]}}`].map((l, i) => {
-                const idx = i===0?0:i===1?2:3;
-                return `<div class="flex items-center gap-3"><span class="text-2xl font-bold w-64 text-right">$${l}$ = </span>
-                ${buildFracInput(`in-k${idx}`, idx, cur.m[idx], 'known', '擴分錯誤')}
-                <button onclick="processInputCheck(document.getElementById('in-k${idx}'))" class="check-btn">檢查</button><span id="msg-in-k${idx}"></span></div>`;
-            }).join('')}
-            <div class="flex items-center gap-3 mt-6">
-                <span class="text-2xl font-bold w-72 text-right text-red-700 leading-snug">因為 $A, B$ 互斥，<br>$A\\cap B = \\emptyset$<br>即 $P(A\\cap B)$ = </span>
-                ${buildFracInput(`in-k4`, 4, 0, 'known', '互斥事件交集為0')}
-                <button onclick="processInputCheck(document.getElementById('in-k4'))" class="check-btn">檢查</button><span id="msg-in-k4"></span>
+    if (cur.isDec) {
+        addStep(`<b><span class="text-2xl">第一步：自動定錨與填入已知 (每格約 1 秒)</span></b>
+        <div id="auto-fill-zone" class="mt-5 space-y-5"></div>`);
+        const zone = document.getElementById('auto-fill-zone');
+        (async function() {
+            for(let item of cur.autoFill) {
+                await new Promise(r => setTimeout(r, 1200));
+                const row = document.createElement('div');
+                row.className = "text-2xl font-bold text-blue-900";
+                row.innerHTML = `➔ ${item.desc}，填入 ${item.v}`;
+                zone.appendChild(row);
+                fillGrid(item.idx, item.v);
+                playDing(true);
+            }
+            setTimeout(renderLogicStep, 1000);
+        })();
+    } else {
+        const denoms = Array.from(new Set([cur.apStr, cur.bStr].map(x=>x.split('/')[1]))).join(', ');
+        addStep(`<b><span class="text-2xl">第一步：找尋公倍數與擴分</span></b>
+            <div class="flex items-center gap-3 mt-5">
+                <span class="text-2xl font-bold text-orange-800">請輸入分母 ${denoms} 的最小公倍數：</span>
+                ${buildInlineInput('in-lcm', null, cur.lcm, 'lcm', '請再檢查公倍數')}
+                <button onclick="processInputCheck(document.getElementById('in-lcm'))" class="check-btn">確認</button><span id="msg-in-lcm"></span>
             </div>
-        </div>`);
-    if(window.MathJax) MathJax.typesetPromise();
-    setTimeout(() => document.getElementById('in-lcm').focus(), 100);
+            <div id="frac-knowns-zone" class="mt-6 space-y-6" style="display:none">
+                <div class="text-2xl font-bold text-orange-800 border-t-2 pt-5">將已知分數進行擴分：</div>
+                ${[`P(S)=1`, `P(A')=\\frac{${cur.apStr.split('/')[0]}}{${cur.apStr.split('/')[1]}}`, `P(B)=\\frac{${cur.bStr.split('/')[0]}}{${cur.bStr.split('/')[1]}}`].map((l, i) => {
+                    const idx = i===0?0:i===1?2:3;
+                    return `<div class="flex items-center gap-3"><span class="text-2xl font-bold w-64 text-right">$${l}$ = </span>
+                    ${buildFracInput(`in-k${idx}`, idx, cur.m[idx], 'known', '擴分錯誤')}
+                    <button onclick="processInputCheck(document.getElementById('in-k${idx}'))" class="check-btn">檢查</button><span id="msg-in-k${idx}"></span></div>`;
+                }).join('')}
+                <div class="flex items-center gap-3 mt-6 border-t-2 border-red-100 pt-5">
+                    <span class="text-2xl font-bold w-80 text-right text-red-700 leading-snug">因為 $A, B$ 互斥，<br>$A\\cap B = \\emptyset$<br>即 $P(A\\cap B)$ = </span>
+                    ${buildFracInput(`in-k4`, 4, 0, 'known', '互斥事件交集為0')}
+                    <button onclick="processInputCheck(document.getElementById('in-k4'))" class="check-btn">檢查</button><span id="msg-in-k4"></span>
+                </div>
+            </div>`);
+        if(window.MathJax) MathJax.typesetPromise();
+        setTimeout(() => document.getElementById('in-lcm').focus(), 100);
+    }
 }
 
 function runMultiFlow() {
@@ -537,13 +583,30 @@ function renderLogicStep() {
     
     const zone = document.getElementById('logic-zone');
     const getL = (b) => (cur.type === 'multi' || cur.type === 'advanced4') ? `n(${b})` : `$P(${b})$`;
-    const logicOrder = [ {l: getL('A'), i:1, h:"S - A'"}, {l: getL("A'"), i:2, h:"S - A"}, {l: getL('B'), i:3, h:"S - B'"}, {l: getL("B'"), i:6, h:"S - B"}, {l: getL("A'\\cap B"), i:5, h:"B - (A∩B)"}, {l: getL("A\\cap B'"), i:7, h:"A - (A∩B)"}, {l: getL("A'\\cap B'"), i:8, h:"行列相減"} ];
+    
+    let logicOrder = [];
+    if (cur.type === 'mutually' && cur.isDec) {
+        logicOrder = [
+            {l: getL('A'), i:1, h:"$S - A'$"},
+            {l: getL("A\\cap B'"), i:7, h:"$A - (A\\cap B)$"},
+            {l: getL("B'"), i:6, h:"$(A\\cap B') + (A'\\cap B')$"},
+            {l: getL('B'), i:3, h:"$S - B'$"},
+            {l: getL("A'\\cap B"), i:5, h:"$B - (A\\cap B)$"}
+        ];
+    } else {
+        logicOrder = [
+            {l: getL('A'), i:1, h:"$S - A'$"}, {l: getL("A'"), i:2, h:"$S - A$"},
+            {l: getL('B'), i:3, h:"$S - B'$"}, {l: getL("B'"), i:6, h:"$S - B$"},
+            {l: getL("A'\\cap B"), i:5, h:"$B - (A\\cap B)$"}, {l: getL("A\\cap B'"), i:7, h:"$A - (A\\cap B)$"},
+            {l: getL("A'\\cap B'"), i:8, h:"行列相減"}
+        ];
+    }
     
     logicOrder.forEach(t => {
         if(cur.user[t.i] !== null) return;
         const row = document.createElement('div'); row.className = "flex items-center gap-3";
-        const ui = cur.type === 'dec' ? buildInlineInput(`in-l${t.i}`, t.i, cur.m[t.i], 'logic', t.h) : buildFracInput(`in-l${t.i}`, t.i, cur.m[t.i], 'logic', t.h);
-        row.innerHTML = `<span class="text-2xl font-bold w-64 text-right">${t.l} = </span>${ui}<button onclick="processInputCheck(document.getElementById('in-l${t.i}'))" class="check-btn ml-3">檢查</button><span id="msg-in-l${t.i}" class="ml-4"></span>`;
+        const ui = cur.type === 'dec' || (cur.type === 'mutually' && cur.isDec) ? buildInlineInput(`in-l${t.i}`, t.i, cur.m[t.i], 'logic', t.h) : buildFracInput(`in-l${t.i}`, t.i, cur.m[t.i], 'logic', t.h);
+        row.innerHTML = `<span class="text-2xl font-bold w-48 text-right">${t.l} = </span>${ui}<button onclick="processInputCheck(document.getElementById('in-l${t.i}'))" class="check-btn ml-3">檢查</button><span id="msg-in-l${t.i}" class="ml-4"></span>`;
         zone.appendChild(row);
     });
     if(window.MathJax) MathJax.typesetPromise();
@@ -552,14 +615,14 @@ function renderLogicStep() {
 
 function unlockObsAndFinal() {
     document.getElementById('obs-section').classList.remove('hidden');
-    addStep(`<p class="text-green-700 font-bold mb-3 text-3xl">✓ 恭喜九宮格完成！</p>
+    addStep(`<p class="text-green-700 font-bold mb-2 text-3xl">✓ 恭喜九宮格完成！</p>
         <p class="text-xl font-bold text-blue-900">🔔 左側「觀察工具區」已解鎖，請務必先利用按鈕觀察圖形關聯，再來回答最終問題。</p>`);
     setTimeout(renderFinalStep, 500);
 }
 
 function renderFinalStep() {
     if(document.getElementById('final-card')) return;
-    const reqStr = cur.type === 'dec' ? '「小數」' : '先填原始分數，若可約分再化為「最簡分數」';
+    const reqStr = (cur.type === 'dec' || (cur.type === 'mutually' && cur.isDec)) ? '「小數」' : '先填原始分數，若可約分再化為「最簡分數」';
     
     addStep(`<b><span class="text-2xl">第三步：最終問題求解</span></b>
         <p class="text-xl mt-3 mb-5 text-orange-800 font-bold">請親自計算題目要求之答案，並化為 ${reqStr}：</p>
@@ -570,7 +633,7 @@ function renderFinalStep() {
         const row = document.createElement('div'); row.className = "flex flex-col gap-4 border-b-4 pb-5";
         let ui = "";
         
-        if (cur.type === 'dec') {
+        if (cur.type === 'dec' || (cur.type === 'mutually' && cur.isDec)) {
             ui = `
             <div class="flex items-center gap-3">
                 <span class="text-2xl font-bold w-64 text-right">${q.l} = </span>
@@ -602,7 +665,7 @@ function renderFinalStep() {
                 </div>
             </div>`;
         }
-        row.innerHTML = ui + `<div id="ans-in-f${i}" class="ml-16 text-blue-700 font-bold bg-blue-50 p-4 rounded-xl w-fit mt-3 text-2xl border-4 border-blue-200 shadow-sm" style="display:none">算法：$ ${cur.ans[i]} $</div>`;
+        row.innerHTML = ui + `<div id="ans-in-f${i}" class="ml-16 text-blue-700 font-bold bg-blue-50 p-4 rounded-xl w-fit mt-3 text-2xl border-4 border-blue-200 shadow-sm" style="display:none"></div>`;
         zone.appendChild(row);
     });
     if(window.MathJax) MathJax.typesetPromise();
@@ -612,7 +675,7 @@ function renderFinalStep() {
 function fillGrid(idx, val) {
     cur.user[idx] = val;
     const el = document.getElementById(`val-${idx}`);
-    el.innerHTML = cur.type === 'dec' ? val : `$\\dfrac{${val}}{${cur.lcm}}$`;
+    el.innerHTML = (cur.type === 'dec' || (cur.type === 'mutually' && cur.isDec)) ? val : `$\\dfrac{${val}}{${cur.lcm}}$`;
     document.getElementById(`grid-${idx}`).classList.remove('flashing');
     if(window.MathJax) MathJax.typesetPromise([el]);
 }
